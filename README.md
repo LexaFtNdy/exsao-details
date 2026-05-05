@@ -43,8 +43,12 @@ ExSAO is not a single application — it's a **5-component ecosystem** working i
 ### Question Engine
 - **5 question types:** Multiple Choice, Multiple Answer, Matching, True/False, and Essay
 - All types support **image attachments** in both questions and answer options
-- Questions can be created manually via a designed UI or **bulk-imported** from existing question banks
-- **Question validation workflow** — questions must be reviewed and approved by a designated validator (assigned by school) before they can be scheduled for an exam
+- **Manual creation** via a purpose-built UI with live preview
+- **Bulk import** from spreadsheet templates
+- **Smart Import Wizard** — paste raw text or upload DOCX/PDF, the system parses and structures questions automatically
+- **Peer review workflow** — questions must be reviewed and approved by a designated validator before they can be scheduled
+- **Question templates** — save and reuse question structures
+- **Social Preset Sharing Hub** — teachers can publish entire exam presets for other teachers to import and use
 
 ### Essay Grading
 - Built-in grading interface for teachers — no external tools needed
@@ -52,31 +56,53 @@ ExSAO is not a single application — it's a **5-component ecosystem** working i
 
 ### Exam Lifecycle
 - **Triple-token system:** Entry Token → Exam Token → Exit Token
-- **Auto-generated exam cards** for student distribution
-- **Auto-remedial:** If an exam is configured with remedial, eligible students are flagged automatically — teachers just request the school admin to schedule it
+- **Container Token** — separate authentication layer for desktop/mobile secure clients
+- **Auto-generated exam cards** for student distribution with print-ready layout
+- **Auto-remedial:** Eligible students flagged automatically — teachers request, admin schedules
+- **Exam DOCX export** — export question sets to Word for offline review
+- **Document verification** — exported reports carry a unique hash for authenticity verification
 
-### Proctoring & Monitoring
+### Proctoring & Monitoring (God Mode)
 - **Near-live monitoring dashboard** with intentional delay to prevent proctors from tipping off students
-- **Proctor control panel:** Add/reduce exam time, force-submit answers, reset sessions for anomalies — every action requires a logged reason
-- **Two teacher subtypes:** Subject Teacher (creates questions & grades) and Proctor (supervises exams) — with strict data visibility isolation between roles during active exams
+- **God Mode control panel:**
+  - Add/reduce exam time on the fly
+  - Force-submit individual student answers
+  - Reset sessions for anomalies
+  - Every action requires a **logged reason** recorded in the audit trail
+- **Two teacher subtypes:** Subject Teacher (creates questions & grades) and Proctor (supervises exams) — with strict data visibility isolation
 - Proctors can be assigned manually, allowing external supervisors from outside the school
+- **Berita Acara** — auto-generated official exam incident reports
 
 ### Anti-Cheat & Violations
 - Desktop client runs in **kiosk mode** (Tauri) — blocks Alt+Tab, screenshots, and external apps
 - **Violation tracking system** — auto-logs tab switches, window blur events, and suspicious behavior
-- Accumulated violations trigger **automatic student blocking** — enforced at the admin level
-- Since the introduction of secure containers (Tauri/Capacitor), students have no way to bypass the lockdown
+- **Heartbeat system** — detects airplane mode and network-kill attempts in real-time
+- Accumulated violations trigger **automatic student blocking** — admin can review, block, or bulk-unblock
+- Since the introduction of secure containers, students have no way to bypass the lockdown
 
 ### Collaborative Exams (Cross-Tenant)
 - **Room-based system** — one school creates a room (becomes Room Master), gets a room code, other schools join by entering the code
 - Questions sync automatically from the Room Master's question bank
+- Room Master can **lock/unlock** rooms, **kick** participants, and control sync timing
 - **Cross-school leaderboard** to drive competition between participating schools
-- IRT analysis works across collaborative exams
+- Dedicated collaborative exam report exports (PDF + Excel)
 
 ### Reports & Analytics
-- **Export formats:** PDF and Excel — both simple summary and detailed per-question breakdown
-- **IRT (Item Response Theory)** analysis for item-level diagnostics using standard psychometric parameters
-- Classroom-integrated exports for teacher convenience
+- **Export formats:** PDF, Excel, and CSV — both simple summary and detailed per-question breakdown
+- **IRT (Item Response Theory)** analysis for item-level diagnostics using standard psychometric parameters — exportable to Excel
+- **Berita Acara** (official exam report) generation
+- Collaborative exam reports with cross-school comparisons
+- **Bulk export** — admin can export reports across multiple schedules at once
+
+### Post-Exam Survey
+- Configurable post-exam surveys for student feedback
+- Survey analytics dashboard with CSV and PDF export
+
+### Admin Toolkit
+- **Custom branding** — per-school logo and identity configuration
+- **Activity/audit logs** — full trail of every action taken in the system
+- **Student management** — bulk import, bulk activate/deactivate, bulk delete
+- **Feature flags** — granular per-tenant feature gating (bulk import, smart import, export reports, remedial, analytics, preset sharing, god mode, violation tracker, audit log, joint tryout, custom branding)
 
 ---
 
@@ -115,10 +141,10 @@ ExSAO is not a single application — it's a **5-component ecosystem** working i
 
 ## 🔧 Infrastructure
 
-- **Server:** Ubuntu VPS, PHP 8.4-FPM, Nginx, MySQL 8
-- **Deployment:** Git-based with custom `exsao-deploy` CLI utility
+- **Server:** Single Ubuntu VPS (4 vCPU, 8 GB RAM) — handling 600+ concurrent sessions
+- **Stack:** PHP 8.4-FPM, Nginx, MySQL 8, OPcache
+- **Deployment:** Git-based with custom `exsao-deploy` CLI utility — zero-downtime FPM reload
 - **Backup:** Automated daily database backup to Google Drive via rclone
-- **Process:** OPcache + FPM reload for zero-downtime deployments
 
 ---
 
