@@ -86,8 +86,32 @@ ExSAO is not a single application — it's a **5-component ecosystem** working i
 
 ---
 
+## 📖 Origin Story
+
+ExSAO wasn't born from a business plan — it was born from getting burned.
+
+I was freelancing when a school hired me to build a basic local CBT app. Standard scope, standard deal. When it came time to pay, they refused to honor the agreement. I wasn't about to hand over my source code for free, so we negotiated: I'd host it myself on a VPS, set everything up, but the code stays mine.
+
+After that first exam season ended, I looked at what I'd built and thought — *this could be something bigger*. That's when the SaaS idea clicked. I rebuilt the architecture from scratch: multi-tenant isolation, a super admin dashboard for school provisioning, and eventually wrapped the client into desktop (Tauri) and mobile (Capacitor) containers when schools started requesting dedicated apps.
+
+### The Day Everything Broke
+
+The real test came during a **cross-tenant collaborative exam** — multiple schools sharing the same exam simultaneously. I developed the feature, tested every scenario I could think of, and shipped it at 5 AM the night before the exam. Went to sleep.
+
+At 7 AM, my phone exploded.
+
+**580 students across 3 schools couldn't use the app.** Some got kicked out immediately after logging in. Some couldn't install the app — Google flagged it as a security threat. Some were mid-exam when the system crashed, and when they tried to resume, their progress was gone. One school had a power outage on top of everything.
+
+I woke up on 1 hour of sleep and coded non-stop until 11 PM that night — live-patching a production system while teachers from multiple schools were sending complaints in real-time. The pressure was unlike anything I'd experienced: every decision I made could either save or permanently corrupt hundreds of student answer records.
+
+The worst moment? After I finally stabilized the server, I discovered that **some student answers had vanished from the database entirely**. Auto-save had been running, but the data wasn't there. I spent that entire night forensically recovering answer data — piecing together fragments, rebuilding records, all while knowing there was a second collaborative exam scheduled for the next morning.
+
+I got it done. Every student's data was recovered. The second exam ran flawlessly.
+
+That week taught me more about production engineering than any course or tutorial ever could — the kind of lessons you only learn when 580 real students are counting on your code to not fail.
+
+---
+
 ## Author
 
 **LexaFtNdy** — Full-Stack Developer
-
-tambahan aja disini gua mau cerita keluh kesah gua aja si ntar lu poles sendiri jadi bahasa teknikal, jadi exsao ini ga semena mena terbentuk, awalanya itu gua kan freelance fullstack developer, dari salah satu client gua ini dia pgn dibuatkan aplikasi cbt untuk ujian basic fitur la, buat deploy di local server mereka, nah udah gua buatin tu singkat waktu, basic ini masihan semua fitur gaada, ya cbt pada umumnya buat local gitu aja, nah pas di akhir pembayaran ternyata sekolah x ini dia gamau bayar sesuai perjanjian intinya underpaid banget la, bahkan bisa dibilang free jatuhnya, nah dari sana itu gua yakali njir nyerahin source codde, akhirnya gua disksui sama guru pihak sana buat yaudah gua pinjemin gua setupin tapi soruce code gaakan gua kasih, akhirnya ketemu solusi pake vps, yang mana setup juga gua, nah dari sana setelah ujian selesai gua mikir, ini bisa si di kembangin lagi, akhirnya keputusan ngebuat aplikasi saas tampil pada saat itu, dan sekarang gua juga harus prioritas mana dulu, berhubung ini cepet cepet dipake lagi beberapa minggu akhirnya gua memutuskan buat beta test free ke sekolah mereka mengenai fitur yang gua buat, awal awal gua fokus ngedevlop env saas super admin gua sama cbt gimana caranya mereka berdua komunikasi, terus seiring berjalannya waktu, ada masukan dari client gua kalau minta dibikinin aplikasi merka nyebutnya yaudah gua warp ke dalam container desktop sama mobile, untuk problem dan tanttangan jelas banyak si, gua sampe lupa apa aja, tapi yang paling gua inget pas producction, itu kan h-1 sebelum production clinet ngeyel minta update fitur apa ya pas itu, oiya mereka pgn ujian gabungan antar sekolah atau antar tenant la teknisnya, nah gua develop gua testing aman tu, semua secenario test udah gua lakuin, kelar jam 5 dini hari, akhirnya gua mutusin la buat tidur, jam 7 anj, gua di telp dapet laporan sekolah A, B, C sekolah yang pakek fitur ujian bersama atau kolaborasi gua ngebug brok gelok, gabisa masuk aplikasi, error semua, ada yang baru masuk langsung kepental, ada yang gabisa install aplikasi, ada yang aplikasi gua kedeteksi keamanan google, ada yang udah ngerjain tiba tiba error terus pas mau ngelanjut ngerjain gabisa, ada yang listrik mati, ada yang gilak banyak bet dah, listrik mati juga, pada saat itu bisa dikatakan nasib 580 siswa berada di tangan gua, dan aplikasi bener bener ancur gabisa dipakek siswa bener bener end user sebernya gabisa dipakek, akhirnya dari sana perwakilan guru guru pada complain sampein ke gua, gimana caranya gua mesti jalanin aplikasi ini bisa jalan pas lagi high concurrency, gimana caranya gua updatte tanpa bikin jawaban siswa ilang atau corrupt, dan banyak lagi, itu gua bener bener kebangun tidur cuma 1 jam terus benerin kode sampe jam 11 malem, dan lu tau apa? PUNCAKNYA kode udah stabil, sekarang jawaban siswa gaada di database, mampus kata gua, akhirnya gua pusing sambil di complain guru malemnya, gua barusan tau pas baru baca wa lagi soalnya nilai anak anaknya pada kaga muncul di laporan atau hasil akhir padahal udah ada autosave itu sistem gua, darisana gua mesti gilak nyariin data mereka, ngegabungin setiap puzzle, satu persatu ya pake ai si, tapi anj preassurenya tekanannya, soalnya itu besoknya ada ujian kedua gabungan juga, mampus kata gua mah, singkat cerita bisa dan habis tu gua langsung gilak, beban production real user sebrutall ini kah anj
