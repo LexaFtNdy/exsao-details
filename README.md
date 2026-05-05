@@ -23,8 +23,8 @@ ExSAO is not a single application — it's a **5-component ecosystem** working i
 │     Multi-tenant · 600+ concurrent sessions         │
 ├─────────────┬─────────────────┬─────────────────────┤
 │  Desktop    │    Mobile       │    Landing           │
-│  Client     │    Client       │    Page              │
-│  (Tauri)    │    (Capacitor)  │    (Nuxt 3)          │
+│  Client     │    (Capacitor)  │    Page              │
+│  (Tauri)    │                 │    (Nuxt 3)          │
 └─────────────┴─────────────────┴─────────────────────┘
 ```
 
@@ -38,6 +38,48 @@ ExSAO is not a single application — it's a **5-component ecosystem** working i
 
 ---
 
+## 📋 Core Features
+
+### Question Engine
+- **5 question types:** Multiple Choice, Multiple Answer, Matching, True/False, and Essay
+- All types support **image attachments** in both questions and answer options
+- Questions can be created manually via a designed UI or **bulk-imported** from existing question banks
+- **Question validation workflow** — questions must be reviewed and approved by a designated validator (assigned by school) before they can be scheduled for an exam
+
+### Essay Grading
+- Built-in grading interface for teachers — no external tools needed
+- Before/after score tracking for fair and transparent grading
+
+### Exam Lifecycle
+- **Triple-token system:** Entry Token → Exam Token → Exit Token
+- **Auto-generated exam cards** for student distribution
+- **Auto-remedial:** If an exam is configured with remedial, eligible students are flagged automatically — teachers just request the school admin to schedule it
+
+### Proctoring & Monitoring
+- **Near-live monitoring dashboard** with intentional delay to prevent proctors from tipping off students
+- **Proctor control panel:** Add/reduce exam time, force-submit answers, reset sessions for anomalies — every action requires a logged reason
+- **Two teacher subtypes:** Subject Teacher (creates questions & grades) and Proctor (supervises exams) — with strict data visibility isolation between roles during active exams
+- Proctors can be assigned manually, allowing external supervisors from outside the school
+
+### Anti-Cheat & Violations
+- Desktop client runs in **kiosk mode** (Tauri) — blocks Alt+Tab, screenshots, and external apps
+- **Violation tracking system** — auto-logs tab switches, window blur events, and suspicious behavior
+- Accumulated violations trigger **automatic student blocking** — enforced at the admin level
+- Since the introduction of secure containers (Tauri/Capacitor), students have no way to bypass the lockdown
+
+### Collaborative Exams (Cross-Tenant)
+- **Room-based system** — one school creates a room (becomes Room Master), gets a room code, other schools join by entering the code
+- Questions sync automatically from the Room Master's question bank
+- **Cross-school leaderboard** to drive competition between participating schools
+- IRT analysis works across collaborative exams
+
+### Reports & Analytics
+- **Export formats:** PDF and Excel — both simple summary and detailed per-question breakdown
+- **IRT (Item Response Theory)** analysis for item-level diagnostics using standard psychometric parameters
+- Classroom-integrated exports for teacher convenience
+
+---
+
 ## ⚡ Key Technical Challenges Solved
 
 ### Concurrency at Scale
@@ -48,21 +90,14 @@ ExSAO is not a single application — it's a **5-component ecosystem** working i
 - **Database transaction wrapping** on all multi-table mutations — if one fails, everything rolls back
 - **Connection pooling** and N+1 query elimination via eager loading
 
-### Anti-Cheat & Exam Security
-- Desktop client runs in **kiosk mode** (Tauri) — blocks Alt+Tab, screenshots, and external apps
-- **Token-based session binding** — one student, one device, one active session
-- **Violation tracking system** — auto-logs tab switches, window blur events, and suspicious behavior
-- Real-time violation counter visible to teachers during active exams
-
 ### Multi-Tenant Data Isolation
 - School-level data isolation with tenant-scoped queries
 - Centralized license management via Super Admin Dashboard
 - Per-tenant configuration (exam rules, grading scales, report templates)
 
 ### Report Generation
-- **Excel & PDF exports** with per-student, per-question breakdown
 - Multi-byte string safety (UTF-8 sanitization) for essay responses containing Unicode
-- Classroom-integrated reports for teacher convenience
+- Efficient bulk exports with PhpSpreadsheet and DomPDF
 
 ---
 
@@ -71,8 +106,9 @@ ExSAO is not a single application — it's a **5-component ecosystem** working i
 | Role | Capabilities |
 |---|---|
 | **Super Admin** | Tenant CRUD, license management, school provisioning |
-| **Admin (School)** | Manage teachers, students, classrooms, exam schedules |
-| **Teacher** | Create exams, import questions (DOCX/PDF), grade essays, export reports |
+| **Admin (School)** | Manage teachers, students, classrooms, exam schedules, violation review |
+| **Teacher** | Create/import questions, grade essays, export reports, question validation |
+| **Proctor** | Monitor exams, control sessions, manage anomalies (assignable to external staff) |
 | **Student** | Take exams, auto-save progress, view results |
 
 ---
