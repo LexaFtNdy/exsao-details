@@ -168,9 +168,9 @@ I woke up on 1 hour of sleep and coded non-stop until 11 PM that night — live-
 
 The worst moment? After I finally stabilized the server, I discovered that **some student answers had vanished from the database entirely**. Auto-save had been running, but the data wasn't there. I spent that entire night forensically recovering answer data — piecing together fragments, rebuilding records, all while knowing there was a second collaborative exam scheduled for the next morning.
 
-I got it done. Every student's data was recovered. The second exam ran flawlessly.
+I got it done. Every student's data was recovered. The second exam ran without critical failures.
 
-That week taught me more about production engineering than any course or tutorial ever could — the kind of lessons you only learn when 580 real students are counting on your code to not fail.
+The system is stable now, but production never truly stops breaking — I still receive bug reports regularly. None are critical anymore, but that's the reality of maintaining live software used by real schools with real students. You don't ship and forget. You ship and keep showing up.
 
 ---
 
